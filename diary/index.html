@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Diário romântico para Isabella" />
+    <title>Para a Isabella 💛</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/variables.css" />
+    <link rel="stylesheet" href="./css/base.css" />
+    <link rel="stylesheet" href="./css/login.css" />
+    <link rel="stylesheet" href="./css/intro.css" />
+    <link rel="stylesheet" href="./css/sections.css" />
+    <link rel="stylesheet" href="./css/diary.css" />
+  </head>
+  <body>
+    <div id="login-screen" class="login-overlay" aria-live="polite">
+      <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <div class="login-lock" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 1 1 10 0v2h.75A1.25 1.25 0 0 1 19 11.25v7.5A1.25 1.25 0 0 1 17.75 20h-11.5A1.25 1.25 0 0 1 5 18.75v-7.5A1.25 1.25 0 0 1 6.25 10H7Zm2 0h6V8a3 3 0 0 0-6 0v2Z"/></svg>
+        </div>
+        <h1 id="login-title">Esse diário é só pra você, Bella 💌</h1>
+        <p class="login-subtitle">Entre com a senha mais especial do mundo.</p>
+
+        <form id="login-form" novalidate>
+          <label class="sr-only" for="password-input">Senha</label>
+          <div class="password-field">
+            <input id="password-input" name="password" type="password" autocomplete="current-password" placeholder="Digite a senha" aria-describedby="login-feedback" />
+            <button id="toggle-password" class="toggle-password" type="button" aria-label="Mostrar senha">Mostrar</button>
+          </div>
+
+          <p id="login-feedback" class="login-feedback" aria-live="polite"></p>
+          <button type="submit" class="login-submit">Entrar</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="intro-screen" class="intro-screen hidden" aria-live="polite" aria-hidden="true">
+      <div class="intro-backdrop"></div>
+      <div class="intro-topbar">
+        <span class="intro-progress-label">Memórias</span>
+        <div class="intro-progress" aria-hidden="true"><span id="intro-progress-bar"></span></div>
+      </div>
+      <button id="skip-intro" class="skip-button" type="button">Pular</button>
+      <div class="intro-contents">
+        <p id="intro-label" class="intro-label">Isabella…</p>
+        <div id="intro-photo" class="intro-photo" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div id="app-shell" class="app-shell hidden" aria-hidden="true">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <span class="brand-mark">♥</span>
+          <span class="brand-name">Para a Isabella 💛</span>
+        </div>
+        <nav class="topbar-nav" aria-label="Navegação do conteúdo">
+          <a href="#favorites">Fotos</a>
+          <a href="#music">Músicas</a>
+          <a href="#diary-access">Diário</a>
+        </nav>
+      </header>
+
+      <main class="page-content">
+        <section id="favorites" class="content-section gallery-section">
+          <div class="section-heading">
+            <p class="eyebrow">Memórias bonitas</p>
+            <h2>As fotos que me fazem sorrir mais rápido</h2>
+          </div>
+          <div id="gallery-grid" class="gallery-grid" aria-live="polite"></div>
+        </section>
+
+        <section id="music" class="content-section music-section">
+          <div class="section-heading">
+            <p class="eyebrow">Canções do coração</p>
+            <h2>Músicas que me lembram você</h2>
+          </div>
+          <div id="music-player" class="music-player" aria-live="polite"></div>
+        </section>
+
+        <section id="diary-access" class="content-section diary-access-section">
+          <div class="journal-card" aria-label="Acesso ao diário">
+            <div class="journal-illustration" aria-hidden="true">
+              <div class="journal-cover">
+                <span class="journal-title">Isabella</span>
+                <span class="journal-heart">♥</span>
+              </div>
+            </div>
+            <div class="journal-copy">
+              <p class="eyebrow">Um convite bem pequeno</p>
+              <h2>Escrevi isso pra você. Abra com carinho 💌</h2>
+              <button id="open-diary" class="open-journal-button" type="button">Abrir diário</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="lightbox" class="lightbox hidden" aria-hidden="true">
+      <div class="lightbox-backdrop" data-close-lightbox="true"></div>
+      <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+        <button class="lightbox-close" type="button" aria-label="Fechar imagem">×</button>
+        <button class="lightbox-nav prev" type="button" aria-label="Imagem anterior">‹</button>
+        <figure class="lightbox-figure">
+          <img id="lightbox-image" src="" alt="" />
+          <figcaption>
+            <span id="lightbox-title"></span>
+          </figcaption>
+        </figure>
+        <button class="lightbox-nav next" type="button" aria-label="Próxima imagem">›</button>
+      </div>
+    </div>
+
+    <div id="diary-modal" class="diary-modal hidden" aria-hidden="true">
+      <div class="diary-backdrop" data-close-diary="true"></div>
+      <div class="diary-book-shell" role="dialog" aria-modal="true" aria-labelledby="book-title">
+        <button id="close-diary" class="close-diary" type="button" aria-label="Fechar diário">✕</button>
+        <div class="diary-header">
+          <div class="chapter-tabs" id="chapter-tabs" aria-label="Capítulos do diário"></div>
+          <button id="reading-mode-toggle" class="reading-mode-toggle" type="button">Modo leitura</button>
+        </div>
+
+        <div class="diary-reading-panel hidden" id="reading-panel" aria-live="polite">
+          <div class="reading-row">
+            <span>Tamanho da fonte</span>
+            <div class="reading-controls">
+              <button type="button" data-font-size="decrease" aria-label="Diminuir fonte">A−</button>
+              <button type="button" data-font-size="increase" aria-label="Aumentar fonte">A+</button>
+            </div>
+          </div>
+          <div class="reading-row">
+            <span>Tema do papel</span>
+            <div class="reading-controls">
+              <button type="button" data-theme="creme">Creme</button>
+              <button type="button" data-theme="sepia">Sépia</button>
+              <button type="button" data-theme="noturno">Noturno</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="book-frame">
+          <div class="book-spine" aria-hidden="true"></div>
+          <div class="book-page left-page">
+            <article id="page-left" class="journal-page" aria-live="polite"></article>
+          </div>
+          <div class="book-page right-page">
+            <article id="page-right" class="journal-page" aria-live="polite"></article>
+          </div>
+        </div>
+
+        <div class="diary-footer">
+          <button id="prev-page" type="button" class="page-arrow" aria-label="Página anterior">←</button>
+          <div class="diary-progress">
+            <span id="page-indicator">1 / 1</span>
+            <div class="progress-track"><span id="page-progress-bar"></span></div>
+          </div>
+          <button id="next-page" type="button" class="page-arrow" aria-label="Próxima página">→</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
