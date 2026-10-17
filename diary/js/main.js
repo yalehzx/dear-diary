@@ -102,7 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
 if (state.authenticated) {
   const appTitle = document.querySelector('.brand-name');
   if (appTitle) {
-    appTitle.textContent = `Para a Isabella 💛`;
+    appTitle.textContent = `Para você, pipinha 💛`;
   }
 }
 

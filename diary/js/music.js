@@ -9,10 +9,12 @@ export function initMusicPlayer() {
     index: 0,
     audio: new Audio(),
     isPlaying: false,
-    timerId: null
+    error: ''
   };
+  state.audio.volume = 0.7;
 
   const defaultArtwork = songs[0]?.capa || '';
+  const defaultText = appConfig.musicIntro;
 
   function formatTime(totalSeconds) {
     if (!Number.isFinite(totalSeconds) || totalSeconds < 0) return '0:00';
@@ -24,16 +26,23 @@ export function initMusicPlayer() {
   function updateMediaSession(track) {
     if (!('mediaSession' in navigator)) return;
 
+    const artwork = track.capa || defaultArtwork;
+    const artworkType = artwork.split('.').pop().toLowerCase().replace('jpg', 'jpeg');
+
     navigator.mediaSession.metadata = new MediaMetadata({
       title: track.titulo,
       artist: track.artista,
       album: 'Diário da Isabella',
-      artwork: [{ src: track.capa || defaultArtwork, sizes: '512x512', type: 'image/svg+xml' }]
+      artwork: [{
+        src: artwork,
+        sizes: '512x512',
+        type: `image/${artworkType}`
+      }]
     });
 
     navigator.mediaSession.setActionHandler('play', () => {
       if (state.audio && state.audio.src) {
-        state.audio.play();
+        playAudio();
       }
     });
     navigator.mediaSession.setActionHandler('pause', () => state.audio.pause());
@@ -53,11 +62,11 @@ export function initMusicPlayer() {
         <span class="track-index">${index + 1}</span>
         <span>
           <strong>${track.titulo}</strong>
-          <small>${track.artista}</small>
+          ${track.artista ? `<small>${track.artista}</small>` : ''}
         </span>
         <span>▶</span>
       `;
-      row.addEventListener('click', () => selectTrack(index));
+      row.addEventListener('click', () => selectTrack(index, true));
       list.appendChild(row);
     });
 
@@ -68,7 +77,6 @@ export function initMusicPlayer() {
 
   function renderPlayer() {
     const track = songs[state.index];
-    const hasLocalAudio = Boolean(track.arquivo && track.arquivo.trim());
     const coverClass = state.isPlaying ? 'cover-art is-playing' : 'cover-art';
 
     playerHost.innerHTML = `
@@ -79,9 +87,9 @@ export function initMusicPlayer() {
         <div class="player-meta">
           <h3>${track.titulo}</h3>
           <p>${track.artista}</p>
-          <div class="player-motivo">${track.motivo}</div>
         </div>
       </div>
+      ${state.error ? `<p class="player-error" role="alert">${state.error}</p>` : ''}
 
       <div class="player-controls">
         <button type="button" class="player-button" data-action="prev" aria-label="Faixa anterior">⏮</button>
@@ -96,25 +104,16 @@ export function initMusicPlayer() {
           <input type="range" min="0" max="1" value="0.7" step="0.01" aria-label="Volume" />
         </div>
       </div>
-      ${track.embedUrl ? `<iframe class="embed-player" src="${track.embedUrl}" title="${track.titulo}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` : ''}
     `;
 
-    if (hasLocalAudio) {
-      state.audio.src = track.arquivo;
-      state.audio.load();
-      state.audio.volume = Number(playerHost.querySelector('input[type="range"]').value || 0.7);
-      state.audio.addEventListener('timeupdate', () => {
-        const fill = playerHost.querySelector('#player-progress-fill');
-        const current = playerHost.querySelector('#player-current-time');
-        const total = playerHost.querySelector('#player-total-time');
-        if (!fill || !current || !total) return;
-
-        const progress = state.audio.duration ? (state.audio.currentTime / state.audio.duration) * 100 : 0;
-        fill.style.width = `${progress}%`;
-        current.textContent = formatTime(state.audio.currentTime);
-        total.textContent = formatTime(state.audio.duration);
-      });
+    if (defaultText) {
+      const introBlock = document.createElement('p');
+      introBlock.className = 'eyebrow';
+      introBlock.textContent = defaultText;
+      playerHost.prepend(introBlock);
     }
+
+    playerHost.querySelector('input[type="range"]').value = String(state.audio.volume);
 
     const toggle = playerHost.querySelector('[data-action="toggle"]');
     const prev = playerHost.querySelector('[data-action="prev"]');
@@ -122,21 +121,11 @@ export function initMusicPlayer() {
     const volume = playerHost.querySelector('input[type="range"]');
 
     toggle?.addEventListener('click', () => {
-      if (track.embedUrl) {
-        state.isPlaying = !state.isPlaying;
-        renderPlayer();
-        renderTrackList();
-        return;
-      }
       if (state.audio.paused) {
-        state.audio.play();
-        state.isPlaying = true;
+        playAudio();
       } else {
         state.audio.pause();
-        state.isPlaying = false;
       }
-      renderPlayer();
-      renderTrackList();
     });
 
     prev?.addEventListener('click', () => selectTrack(state.index - 1));
@@ -150,28 +139,55 @@ export function initMusicPlayer() {
     updateMediaSession(track);
   }
 
-  function selectTrack(nextIndex) {
+  function playAudio() {
+    state.error = '';
+    state.audio.play().catch(() => {
+      state.error = 'Não foi possível reproduzir esta música.';
+      state.isPlaying = false;
+      renderPlayer();
+    });
+  }
+
+  function selectTrack(nextIndex, autoplay = false) {
     const normalized = (nextIndex + songs.length) % songs.length;
     state.index = normalized;
-    state.isPlaying = true;
-    if (state.audio) {
-      state.audio.pause();
-      state.audio.currentTime = 0;
-      if (songs[normalized].arquivo) {
-        state.audio.src = songs[normalized].arquivo;
-        state.audio.play();
-      }
-    }
+    state.isPlaying = false;
+    state.error = '';
+    state.audio.pause();
+    state.audio.src = songs[normalized].arquivo;
+    state.audio.load();
     renderPlayer();
+    if (autoplay) playAudio();
   }
 
+  state.audio.addEventListener('timeupdate', () => {
+    const fill = playerHost.querySelector('#player-progress-fill');
+    const current = playerHost.querySelector('#player-current-time');
+    const total = playerHost.querySelector('#player-total-time');
+    if (!fill || !current || !total) return;
+
+    const progress = state.audio.duration ? (state.audio.currentTime / state.audio.duration) * 100 : 0;
+    fill.style.width = `${progress}%`;
+    current.textContent = formatTime(state.audio.currentTime);
+    total.textContent = formatTime(state.audio.duration);
+  });
+  state.audio.addEventListener('play', () => {
+    state.isPlaying = true;
+    state.error = '';
+    renderPlayer();
+  });
+  state.audio.addEventListener('pause', () => {
+    state.isPlaying = false;
+    renderPlayer();
+  });
+  state.audio.addEventListener('ended', () => selectTrack(state.index + 1, true));
+  state.audio.addEventListener('error', () => {
+    state.error = 'Não foi possível carregar esta música.';
+    state.isPlaying = false;
+    renderPlayer();
+  });
+
+  if (songs.length === 0) return;
+  state.audio.src = songs[state.index].arquivo;
   renderPlayer();
-
-  const defaultText = appConfig.musicIntro;
-  if (defaultText) {
-    const introBlock = document.createElement('p');
-    introBlock.className = 'eyebrow';
-    introBlock.textContent = defaultText;
-    playerHost.prepend(introBlock);
-  }
 }

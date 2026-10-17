@@ -1,34 +1,32 @@
 export const songs = [
   {
-    titulo: 'Ain’t No Mountain High Enough',
-    artista: 'Marvin Gaye & Tammi Terrell',
-    capa: 'assets/covers/cover-1.svg',
-    arquivo: '',
-    embedUrl: 'https://www.youtube.com/embed/xPnd4x2f0aM?si=VPrQdpM8d8zWC09k',
-    motivo: 'Porque ela faz cada caminho parecer possível.'
+    titulo: 'The Cure',
+    artista: 'Olivia Rodrigo',
+    capa: 'assets/images/Olivia_Rodrigo_-_The_Cure.png',
+    arquivo: 'assets/audio/Olivia Rodrigo - The Cure.mp3'
   },
   {
-    titulo: 'Can’t Help Falling in Love',
-    artista: 'Elvis Presley',
-    capa: 'assets/covers/cover-2.svg',
-    arquivo: '',
-    embedUrl: 'https://www.youtube.com/embed/vGJTaP6anOU?si=4n2WQ8z0v5N0QJfX',
-    motivo: 'Porque é a sensação de cair de um jeito tão bom.'
+    titulo: 'Before Spring Ends',
+    artista: 'Wang OK',
+    capa: 'assets/images/image_before spring ends.webp',
+    arquivo: 'assets/audio/Wang_OK_-_Before_Spring_Ends_WANG_OK_(mp3.pm).mp3'
   },
   {
-    titulo: 'Perfect',
-    artista: 'Ed Sheeran',
-    capa: 'assets/covers/cover-3.svg',
-    arquivo: '',
-    embedUrl: 'https://www.youtube.com/embed/2Vv-BfVoR4g?si=e2l4wzxlf11Gf0Qg',
-    motivo: 'Porque ela é a ideia de perfeição sem tentar ser.'
+    titulo: 'Not a Lot, Just Forever',
+    artista: 'Adrianne Lenker',
+    capa: 'assets/images/image_not a lot.jpg',
+    arquivo: 'assets/audio/adrianne lenker - not a lot, just forever (official audio).mp3'
   },
   {
-    titulo: 'At Last',
-    artista: 'Etta James',
-    capa: 'assets/covers/cover-4.svg',
-    arquivo: '',
-    embedUrl: 'https://www.youtube.com/embed/3mJjfcR9baw?si=RtI9RWMCeGx4Yw3L',
-    motivo: 'Porque cada momento ao lado dela parece uma descoberta bonita.'
+    titulo: 'We Fell in Love in October',
+    artista: 'Girl in Red',
+    capa: 'assets/images/image_we fell in love in october.jpg',
+    arquivo: 'assets/audio/girl in red - we fell in love in october.mp3'
+  },
+  {
+    titulo: 'The Only Exception',
+    artista: 'Paramore',
+    capa: 'assets/images/image_the only exception.webp',
+    arquivo: 'assets/audio/paramore - the only exception (lyrics).mp3'
   }
 ];
