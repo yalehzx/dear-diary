@@ -103,9 +103,7 @@
 
 .login-submit,
 .open-journal-button,
-.page-arrow,
-.reading-mode-toggle,
-.reading-controls button {
+.page-arrow {
   border: 0;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--rose-main), var(--rose-deep));
@@ -124,13 +122,9 @@
 .login-submit:hover,
 .open-journal-button:hover,
 .page-arrow:hover,
-.reading-mode-toggle:hover,
-.reading-controls button:hover,
 .login-submit:focus-visible,
 .open-journal-button:focus-visible,
-.page-arrow:focus-visible,
-.reading-mode-toggle:focus-visible,
-.reading-controls button:focus-visible {
+.page-arrow:focus-visible {
   filter: brightness(1.04);
   outline: none;
 }
