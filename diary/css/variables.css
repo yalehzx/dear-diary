@@ -1,0 +1,54 @@
+:root {
+  --bg-rose: #fff8f2;
+  --bg-rose-deep: #f6e3e1;
+  --bg-plum: #2a2230;
+  --paper-creme: #fbf6ec;
+  --paper-sepia: #f1e4cc;
+  --paper-night: #1f1b24;
+  --paper-night-text: #e9e1d4;
+  --text-main: #3b2f2f;
+  --text-soft: #685b5b;
+  --rose-main: #c9808a;
+  --rose-deep: #a65d6a;
+  --gold: #c8a24a;
+  --sage: #8fa58a;
+  --blue-soft: #7c93a8;
+  --shadow-soft: rgba(73, 44, 52, 0.14);
+  --shadow-strong: rgba(39, 27, 34, 0.26);
+  --line: rgba(59, 47, 47, 0.14);
+  --white: #fffdfb;
+  --black: #1d1a1c;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Lora', Georgia, serif;
+  --font-script: 'Parisienne', cursive;
+  --radius-s: 18px;
+  --radius-m: 28px;
+  --radius-l: 38px;
+  --shadow-card: 0 22px 55px rgba(93, 64, 72, 0.12);
+  --shadow-stronger: 0 35px 80px rgba(45, 31, 38, 0.18);
+  --default-font-size: 20px;
+  --body-line-height: 1.8;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  --journal-bg: var(--paper-creme);
+  --journal-text: var(--text-main);
+  --journal-accent: var(--rose-main);
+}
+
+body[data-theme='sepia'] {
+  --journal-bg: var(--paper-sepia);
+  --journal-text: #4d3a2d;
+  --journal-accent: #8a5b43;
+}
+
+body[data-theme='noturno'] {
+  --journal-bg: var(--paper-night);
+  --journal-text: var(--paper-night-text);
+  --journal-accent: #d8b0a2;
+  color-scheme: dark;
+}
