@@ -114,7 +114,6 @@ export function initMusicPlayer() {
     }
 
     playerHost.querySelector('input[type="range"]').value = String(state.audio.volume);
-
     const toggle = playerHost.querySelector('[data-action="toggle"]');
     const prev = playerHost.querySelector('[data-action="prev"]');
     const next = playerHost.querySelector('[data-action="next"]');

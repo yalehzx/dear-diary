@@ -74,6 +74,10 @@ export function initDiary() {
   };
   const singlePageLayout = window.matchMedia('(max-width: 860px)');
 
+  function getPageStep() {
+    return singlePageLayout.matches ? 1 : 2;
+  }
+
   function renderPage(page) {
     if (!page) {
       return `
@@ -109,6 +113,9 @@ export function initDiary() {
 
   function render() {
     state.currentPageIndex = clamp(state.currentPageIndex, 0, diaryPages.length - 1);
+    if (!singlePageLayout.matches) {
+      state.currentPageIndex -= state.currentPageIndex % 2;
+    }
     sessionStorage.setItem('lastDiaryPage', String(state.currentPageIndex));
 
     if (singlePageLayout.matches) {
@@ -125,7 +132,9 @@ export function initDiary() {
     if (pageProgressBar) pageProgressBar.style.width = `${progress}%`;
 
     if (prevPageButton) prevPageButton.disabled = state.currentPageIndex === 0;
-    if (nextPageButton) nextPageButton.disabled = state.currentPageIndex >= diaryPages.length - 1;
+    if (nextPageButton) {
+      nextPageButton.disabled = state.currentPageIndex + getPageStep() >= diaryPages.length;
+    }
   }
 
   openDiaryButton.addEventListener('click', () => {
@@ -148,14 +157,15 @@ export function initDiary() {
 
   prevPageButton?.addEventListener('click', () => {
     if (state.currentPageIndex > 0) {
-      state.currentPageIndex -= 1;
+      state.currentPageIndex -= getPageStep();
       render();
     }
   });
 
   nextPageButton?.addEventListener('click', () => {
-    if (state.currentPageIndex < diaryPages.length - 1) {
-      state.currentPageIndex += 1;
+    const pageStep = getPageStep();
+    if (state.currentPageIndex + pageStep < diaryPages.length) {
+      state.currentPageIndex += pageStep;
       render();
     }
   });
@@ -168,13 +178,14 @@ export function initDiary() {
     }
     if (event.key === 'ArrowLeft') {
       if (state.currentPageIndex > 0) {
-        state.currentPageIndex -= 1;
+        state.currentPageIndex -= getPageStep();
         render();
       }
     }
     if (event.key === 'ArrowRight') {
-      if (state.currentPageIndex < diaryPages.length - 1) {
-        state.currentPageIndex += 1;
+      const pageStep = getPageStep();
+      if (state.currentPageIndex + pageStep < diaryPages.length) {
+        state.currentPageIndex += pageStep;
         render();
       }
     }
